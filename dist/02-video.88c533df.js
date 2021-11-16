@@ -3119,7 +3119,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // ------------------- Библиотеки -----------------
 // ------------------- Инициализация --------------
 // Инициализация узла
-const iframe = document.querySelector('#vimeo-player'); // Создание экземпляра
+const iframe = document.querySelector('#vimeo-player'); // const iframe = document.getElementById('vimeo-player');
+// Создание экземпляра
 
 const player = new _player.default(iframe); // ------------------- Обработчики ----------------
 // Обновляет в локальном хранилище текущую позицию
@@ -3127,14 +3128,15 @@ const player = new _player.default(iframe); // ------------------- Обрабо�
 const onPlay = time => localStorage.setItem("videoplayer-current-time", time.seconds); // Получает из локального хранилища текущую позицию
 
 
-const currentTimeOfVideo = localStorage.getItem("videoplayer-current-time"); // Если текущая позиция отлична от 0, устанавливаем на плеере текущую
-// позицию
+const currentTimeOfVideo = localStorage.getItem("videoplayer-current-time"); // Если есть сохраненная текущая позиция и она отлична от 0, 
+// устанавливаем на плеере сохраненную текущую позицию
 
-if (currentTimeOfVideo) player.setCurrentTime(currentTimeOfVideo); // ------------------- Слушатели ------------------
+currentTimeOfVideo ? player.setCurrentTime(currentTimeOfVideo) : null; // ------------------- Слушатели ------------------
 // При запуске просмотра вызываем обработку и передаем текущие 
 // секунды в onPlay с интервалом в 1 секунду
 
-player.on('timeupdate', (0, _lodash.default)(onPlay, 1000));
+player.on('timeupdate', (0, _lodash.default)(onPlay, 1000)); // Раскомментировать для очистки localStorage
+// localStorage.clear();
 },{"@vimeo/player":"../node_modules/@vimeo/player/dist/player.es.js","lodash.throttle":"../node_modules/lodash.throttle/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -3163,7 +3165,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1062" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "27457" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
