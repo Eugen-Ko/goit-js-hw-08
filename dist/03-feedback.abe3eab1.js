@@ -569,36 +569,57 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // ------------------- Библиотеки -----------------
 // ------------------- Инициализация --------------
 // Инициализация узла
-const refs = {
-  form: document.querySelector(".feedback-form"),
-  input: document.querySelector(".feedback-form input"),
-  textArea: document.querySelector(".feedback-form textarea")
-}; // ------------------- Обработчики ----------------
+const formFeedBack = document.querySelector(".feedback-form"); // Запись ключа локального хранилища
+
+const localStorageKey = "feedback-form-state"; // Заполнение полей формы, 
+// если есть сохраненные значение в lokalStorage
+
+const formInit = () => {
+  // Получаем значение из localStorage
+  let currentValueOfFields = localStorage.getItem(localStorageKey); // Если не пустое значение не "пустое"
+
+  if (!currentValueOfFields) return; // Парсим "объектную строку" в объект
+
+  currentValueOfFields = JSON.parse(currentValueOfFields); // Преобразуем объект в массив массивов 
+  // и потом записываем соответствующие значения в поля
+
+  Object.entries(currentValueOfFields).forEach(([name, value]) => formFeedBack.elements[name].value = value);
+};
+
+formInit(); // ------------------- Обработчики ----------------
 
 const onFormInput = e => {
-  ;
+  // Обновляем текущее значение полей
+  let currentValueOfFields = localStorage.getItem(localStorageKey); // Парсим строки в объект
+
+  currentValueOfFields = currentValueOfFields ? JSON.parse(currentValueOfFields) : {}; // Записываем в соответствующее свойство объекта значение поля
+
+  currentValueOfFields[e.target.name] = e.target.value; // Преобразуем объект в "объектные строки"
+
+  localStorage.setItem(localStorageKey, JSON.stringify(currentValueOfFields));
 };
 
 const onFormSubmit = e => {
   // запрет перегрузки страницы 
   e.preventDefault(); // создаем экземпляр формы
 
-  const formData = new FormData(refs.form); // передаем в currentCard значение formData
+  const formData = new FormData(formFeedBack); // передаем в currentCard значение formData
 
   let currentCard = {};
   formData.forEach((value, name) => currentCard[name] = value); // вывод в консоль
 
   console.table(currentCard); // обнуление полей
 
-  e.currentTarget.reset();
-}; // Проверка и  заполнение полей если в localStorage что-то есть
-// ------------------- Слушатели ------------------
+  e.currentTarget.reset(); // Очистка localStorage
+
+  localStorage.clear();
+}; // ------------------- Слушатели ------------------
 // Слушатель на ввод
 
 
-refs.form.addEventListener('input', (0, _lodash.default)(onFormInput, 500)); // Слушатель на submit
+formFeedBack.addEventListener('input', (0, _lodash.default)(onFormInput, 500)); // Слушатель на submit
 
-refs.form.addEventListener('submit', onFormSubmit);
+formFeedBack.addEventListener('submit', onFormSubmit);
 },{"lodash.throttle":"../node_modules/lodash.throttle/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -627,7 +648,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "27457" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1032" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

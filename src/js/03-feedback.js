@@ -3,17 +3,50 @@ import throttle from 'lodash.throttle';
 
 // ------------------- Инициализация --------------
 // Инициализация узла
-const refs = {
-  form: document.querySelector(".feedback-form"),
-  input: document.querySelector(".feedback-form input"),
-  textArea: document.querySelector(".feedback-form textarea"),
+
+const formFeedBack = document.querySelector(".feedback-form");
+
+// Запись ключа локального хранилища
+const LOCALSTORAGEKEY = "feedback-form-state";
+
+// Заполнение полей формы, 
+// если есть сохраненные значение в lokalStorage
+
+const formInit = () => {
+
+  // Получаем значение из localStorage
+  let currentValueOfFields = localStorage.getItem(LOCALSTORAGEKEY);
+  
+  // Если значение не "пустое"
+  if (!currentValueOfFields) return;
+  
+  // Парсим "объектную строку" в объект
+  currentValueOfFields = JSON.parse(currentValueOfFields);
+   
+  // Преобразуем объект в массив массивов 
+  // и потом записываем соответствующие значения в поля
+  Object.entries(currentValueOfFields).forEach(([name, value]) => formFeedBack.elements[name].value = value);
+  
 }
+
+formInit();
 
 // ------------------- Обработчики ----------------
 
 const onFormInput = (e) => {
-  ;
 
+  // Обновляем текущее значение полей
+  let currentValueOfFields = localStorage.getItem(LOCALSTORAGEKEY);
+
+  // Парсим строки в объект
+  currentValueOfFields = currentValueOfFields ? JSON.parse(currentValueOfFields) : {};
+
+  // Записываем в соответствующее свойство объекта значение поля
+  currentValueOfFields[e.target.name] = e.target.value
+
+  // Преобразуем объект в "объектные строки"
+  localStorage.setItem(LOCALSTORAGEKEY, JSON.stringify(currentValueOfFields));
+  
 };
 
 const onFormSubmit = (e) => {
@@ -22,7 +55,7 @@ const onFormSubmit = (e) => {
   e.preventDefault();
   
   // создаем экземпляр формы
-  const formData = new FormData(refs.form);
+  const formData = new FormData(formFeedBack);
   
   // передаем в currentCard значение formData
   let currentCard = {};
@@ -33,16 +66,13 @@ const onFormSubmit = (e) => {
 
   // обнуление полей
   e.currentTarget.reset();
+  // Очистка localStorage
+  localStorage.clear();
 
 }
 
-
-// Проверка и  заполнение полей если в localStorage что-то есть
-
-
-
 // ------------------- Слушатели ------------------
 // Слушатель на ввод
-refs.form.addEventListener('input', throttle(onFormInput, 500));
+formFeedBack.addEventListener('input', throttle(onFormInput, 500));
 // Слушатель на submit
-refs.form.addEventListener('submit', onFormSubmit);
+formFeedBack.addEventListener('submit', onFormSubmit);
