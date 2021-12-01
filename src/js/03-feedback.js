@@ -10,6 +10,7 @@ const btn = document.querySelector('.feedback-form button');
 // ----------------------------------
 // ----------- Оюработчик -----------
 // ----------------------------------
+Я поломал этот код
 const onEmailInput = () => {
   console.log('Yesssssssssssssss');
 };
